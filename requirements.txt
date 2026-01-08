@@ -20,4 +20,4 @@ scikit-learn==1.6.1
 # Others
 pillow==10.2.0
 tqdm
-gradio
+gradio==4.44.1
