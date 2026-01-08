@@ -7,6 +7,11 @@ import inference
 import utils
 import config
 from PIL import Image
+import warnings
+
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+os.environ["GRADIO_ANALYTICS_ENABLED"] = "False"
 
 # Prepare Examples List
 sample_folder = config.SAMPLE_FOLDER
@@ -83,8 +88,8 @@ def save_feedback(res_state, is_corr, act_class, comment, flip, bright, cont, er
     return "Log saved to prediction_logs.csv", None, None, ""
 
 # GRADIO USER INTERFACE
-with gr.Blocks(title="Face Recognition System") as demo:
-    last_result = gr.State()
+with gr.Blocks(theme=gr.themes.Soft(), title="Face Recognition System") as demo:
+    last_result = gr.State(None)
 
     gr.Markdown("## Face Identification Demo with Swin Transformer & Inception Resnet V1")
     gr.Markdown("**Take a photo from the sample gallery or upload your own image.**")
@@ -93,7 +98,7 @@ with gr.Blocks(title="Face Recognition System") as demo:
         with gr.Column(scale=1):
             with gr.Group():
                 folder_select = gr.Dropdown(choices=all_folders, label="Choose Folder (Class)")
-                sample_gallery = gr.Gallery(show_label=False, columns=5, rows=1, height="100px", object_fit="contain")
+                sample_gallery = gr.Gallery(show_label=False, columns=5, height=150)
 
             model_dropdown = gr.Dropdown(choices=["SwinTransformer", "InceptionResNetV1"], value="SwinTransformer", label="Architecture Selection")
 
@@ -153,4 +158,8 @@ with gr.Blocks(title="Face Recognition System") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft(), ssr_mode=False)
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=7860,
+        show_api=False
+    )

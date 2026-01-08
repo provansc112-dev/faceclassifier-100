@@ -21,4 +21,4 @@ pydantic>=2.0
 # Others
 pillow==10.2.0
 tqdm
-gradio==5.4.0
+gradio==4.44.1
