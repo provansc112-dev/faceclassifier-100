@@ -148,8 +148,17 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Face Recognition System") as demo:
     predict_inputs = [input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider]
     predict_outputs = [output_img, output_info, feedback_area, last_result]
 
-    btn_normal.click(fn=lambda *args: process_ui(*args, mode="NORMAL"), inputs=predict_inputs, outputs=predict_outputs)
-    btn_stress.click(fn=lambda *args: process_ui(*args, mode="STRESS"), inputs=predict_inputs, outputs=predict_outputs)
+    btn_normal.click(
+        fn=process_ui, 
+        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider, gr.State("NORMAL")], 
+        outputs=predict_outputs
+    )
+
+    btn_stress.click(
+        fn=process_ui, 
+        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider, gr.State("STRESS")], 
+        outputs=predict_outputs
+    )
 
     btn_save.click(
         fn=save_feedback,
@@ -158,7 +167,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Face Recognition System") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch(
+    demo.queue().launch(
         server_name="0.0.0.0",
         server_port=7860,
         show_api=False
