@@ -82,7 +82,7 @@ def predict_logic(img_obj, model_type='swin'):
     with torch.no_grad():
         res = net(img_input)
         outputs = res[2] if isinstance(res, (tuple, list)) else res
-        probs = torch.nn.functional.softmax(outputs.squeeze(), dim=0)
+        probs = torch.nn.functional.softmax(outputs.squeeze(), dim=0).cpu()
         conf, pred_idx = torch.max(probs, 0)
 
     confidence_score = conf.item()
