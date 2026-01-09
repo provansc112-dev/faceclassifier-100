@@ -147,16 +147,16 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Face Recognition System") as demo:
     # Event Handlers
     predict_inputs = [input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider]
     predict_outputs = [output_img, output_info, feedback_area, last_result]
-
+    
     btn_normal.click(
-        fn=process_ui, 
-        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider, gr.State("NORMAL")], 
+        fn=lambda i, m, f, b, c, e: process_ui(i, m, f, b, c, e, "NORMAL"),
+        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider],
         outputs=predict_outputs
     )
-
+    
     btn_stress.click(
-        fn=process_ui, 
-        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider, gr.State("STRESS")], 
+        fn=lambda i, m, f, b, c, e: process_ui(i, m, f, b, c, e, "STRESS"),
+        inputs=[input_image, model_dropdown, flip_check, bright_slider, cont_slider, erase_slider],
         outputs=predict_outputs
     )
 
