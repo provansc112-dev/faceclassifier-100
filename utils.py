@@ -20,10 +20,9 @@ def apply_custom_augmentation(img, do_flip, brightness, contrast, erase_prob):
     
     # 3. Random Erasing (only available in tensor form)
     img_tensor = T.ToTensor()(img)
-    if erase_prob > 0:
-        eraser = T.RandomErasing(p=1.0, scale=(erase_prob, erase_prob), ratio=(1, 1), value=0)
+    if erase_prob > 0.01:
+        eraser = T.RandomErasing(p=1.0, scale=(0.02, max(0.05, erase_prob)), ratio=(1, 1), value=0)
         img_tensor = eraser(img_tensor)
-    
     return T.ToPILImage()(img_tensor)
 
 def get_transforms(model_type, is_train=False):
