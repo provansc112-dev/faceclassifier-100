@@ -32,7 +32,12 @@ def process_ui(input_img, model_choice, do_flip, bright, cont, erase, mode):
         aug_img = input_img 
         header = "### NORMAL TEST\n"
     else:
-        aug_img = utils.apply_custom_augmentation(input_img, do_flip, bright, cont, erase)
+        aug_img = utils.apply_custom_augmentation(
+            input_img,
+            do_flip=do_flip,
+            brightness=bright,
+            contrast=cont,
+            erase_prob=erase)
         header = "### STRESS TEST (GENERALIZATION)\n"
     
     result = inference.predict_logic(aug_img, model_type=m_type)
