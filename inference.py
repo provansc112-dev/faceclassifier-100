@@ -6,6 +6,7 @@ import utils
 import model
 
 mtcnn = MTCNN(image_size=224, margin=20, device=config.DEVICE, post_process=False)
+MODELS_CACHE = {}
 
 def format_prediction_text(result):
     if result['probs'] is None:
@@ -38,6 +39,12 @@ def predict_logic(img_obj, model_type='swin'):
     Web or local usage can call this function.   
     """
 
+    if not isinstance(img_obj, Image.Image):
+        try:
+            img_obj = Image.fromarray(img_obj.astype('uint8')).convert('RGB')
+        except Exception as e:
+            print(f"Conversion Error: {e}")
+    
     # Face Detection
     face = mtcnn(img_obj)
     if face is None:
@@ -54,7 +61,12 @@ def predict_logic(img_obj, model_type='swin'):
     face_img = Image.fromarray(face_img_np)
     
     # Load Model
-    net = model.load_trained_model(model_type)
+    global MODELS_CACHE
+    if model_type not in MODELS_CACHE:
+        print(f"Loading {model_type} model into memory...")
+        MODELS_CACHE[model_type] = model.load_trained_model(model_type)
+    
+    net = MODELS_CACHE[model_type]
 
     # Transform
     transform = utils.get_transforms(model_type, is_train=False)
