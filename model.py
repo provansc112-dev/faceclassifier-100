@@ -26,7 +26,7 @@ def load_trained_model(model_type):
 
     if model_type == 'inception':
         model = FaceClassifier(num_classes=config.NUM_CLASSES)
-        checkpoint = torch.load(weights_path, map_location=device)
+        checkpoint = torch.load(weights_path, map_location=device, weights_only=False)
         model.load_state_dict(checkpoint, strict=False)
     
     elif model_type == 'swin':
@@ -36,7 +36,7 @@ def load_trained_model(model_type):
         model.feature = nn.Linear(num_features, config.NUM_CLASSES)
         
         print(f"Loading SwinFace weights from: {weights_path}")
-        checkpoint = torch.load(weights_path, map_location=device)
+        checkpoint = torch.load(weights_path, map_location=device, weights_only=False)
         
         state_dict = checkpoint['state_dict_backbone'] if 'state_dict_backbone' in checkpoint else checkpoint
         new_state_dict = OrderedDict()
