@@ -41,3 +41,11 @@ DATA_DIR = "config/data" # Ensure this directory contains 'train', 'val', 'test'
 SAMPLE_FOLDER = "samples/" # Folder for sample images in the GUI
 THRESHOLD_SWIN = 0.8 # Threshold for Swin Transformer
 THRESHOLD_INCEPTION = 0.3 # Threshold for Inception Resnet V1
+
+# 5. Training Configuration
+SWIN_EPOCHS = 30
+INCEPTION_EPOCHS = {
+    'phase1': 10,  # Training Head Only
+    'phase2': 10,  # Fine-Tuning
+    'phase3': 5    # Final Tuning
+}

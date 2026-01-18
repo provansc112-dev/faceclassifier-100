@@ -46,7 +46,9 @@ class Trainer:
         epoch_acc = running_corrects.double() / self.dataset_sizes[phase]
         return epoch_loss, epoch_acc
 
-    def train_swin(self, num_epochs=30):
+    def train_swin(self, num_epochs=None):
+        if num_epochs is None:
+            num_epochs = config.SWIN_EPOCHS
         print(f"\nINITIALIZE TRAINING FOR SWIN TRANSFORMER ({num_epochs} Epoch) ---")
         optimizer = optim.AdamW(self.model.parameters(), lr=1e-4, weight_decay=0.05)
         scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=num_epochs)
@@ -71,7 +73,7 @@ class Trainer:
             param.requires_grad = False
         
         opt_p1 = optim.Adam(self.model.head.parameters(), lr=0.001)
-        self._execute_phases(opt_p1, epochs=10, save_name="inc_p1.pth")
+        self._execute_phases(opt_p1, epochs=config.INCEPTION_EPOCHS['phase1'], save_name="inc_p1.pth")
 
         # PHASE 2: Fine-Tuning
         print("\nINCEPTION PHASE 2: Fine-Tuning")
@@ -79,12 +81,12 @@ class Trainer:
         for param in self.model.base_model.repeat_2.parameters(): param.requires_grad = True
         
         opt_p2 = optim.Adam(self.model.parameters(), lr=1e-5)
-        self._execute_phases(opt_p2, epochs=10, save_name="inc_p2.pth")
+        self._execute_phases(opt_p2, epochs=config.INCEPTION_EPOCHS['phase2'], save_name="inc_p2.pth")
 
         # PHASE 3: Final Tuning
         print("\nINCEPTION PHASE 3: Final Tuning")
         opt_p3 = optim.Adam(self.model.parameters(), lr=1e-6)
-        self._execute_phases(opt_p3, epochs=5, save_name="inc_final.pth")
+        self._execute_phases(opt_p3, epochs=config.INCEPTION_EPOCHS['phase3'], save_name="inc_final.pth")
 
     def _execute_phases(self, optimizer, epochs, save_name):
         best_acc = 0.0
@@ -104,6 +106,6 @@ if __name__ == "__main__":
     task = Trainer(model_type=m_type)
     
     if m_type == 'swin':
-        task.train_swin(num_epochs=config.NUM_EPOCHS)
+        task.train_swin()  # Uses config.SWIN_EPOCHS by default
     else:
-        task.train_inception()
+        task.train_inception()  # Uses config.INCEPTION_EPOCHS by default

@@ -26,7 +26,7 @@ def load_trained_model(model_type):
 
     if model_type == 'inception':
         model = FaceClassifier(num_classes=config.NUM_CLASSES)
-        checkpoint = torch.load(weights_path, map_location=device, weights_only=False)
+        checkpoint = torch.load(weights_path, map_location=device)
         model.load_state_dict(checkpoint, strict=False)
     
     elif model_type == 'swin':
@@ -36,7 +36,7 @@ def load_trained_model(model_type):
         model.feature = nn.Linear(num_features, config.NUM_CLASSES)
         
         print(f"Loading SwinFace weights from: {weights_path}")
-        checkpoint = torch.load(weights_path, map_location=device, weights_only=False)
+        checkpoint = torch.load(weights_path, map_location=device)
         
         state_dict = checkpoint['state_dict_backbone'] if 'state_dict_backbone' in checkpoint else checkpoint
         new_state_dict = OrderedDict()
@@ -51,3 +51,30 @@ def load_trained_model(model_type):
     model.to(device)
     model.eval()
     return model
+
+class FaceEuclideanWrapper(nn.Module):
+    def __init__(self, base_model, db_size=4991, feature_dim=512):
+        super().__init__()
+        self.backbone = base_model
+        self.db = nn.Parameter(torch.randn(db_size, feature_dim), requires_grad=False)
+
+    def forward(self, x):
+        emb = self.backbone(x)
+        
+        if isinstance(emb, (tuple, list)):
+            emb = emb[0]
+            
+        if emb.dim() == 3:
+            emb = emb.mean(dim=1)
+        elif emb.dim() == 4:
+            emb = emb.mean(dim=[2, 3])
+
+        if emb.size(1) > 512:
+            emb = emb[:, :512]
+        elif emb.size(1) < 512:
+            padding = torch.zeros(emb.size(0), 512 - emb.size(1)).to(emb.device)
+            emb = torch.cat([emb, padding], dim=1)
+
+        dist = torch.cdist(emb, self.db, p=2)
+        min_dist, min_idx = torch.min(dist, dim=1)
+        return min_dist, min_idx

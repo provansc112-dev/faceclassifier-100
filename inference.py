@@ -121,9 +121,10 @@ def predict_image_file(image_path, model_type='swin', do_stress_test=False, **kw
 
 if __name__ == "__main__":
     # EXAMPLE 1: Normal Prediction
-    predict_image_file('089_61.jpg', model_type='swin')
+    # predict_image_file('089_61.jpg', model_type='swin')
 
     # EXAMPLE 2: Stress Test Prediction with Custom Augmentation
     # predict_image_file('089_61.jpg', model_type='swin', 
     #                    do_stress_test=True, do_flip=True, 
     #                    brightness=1.5, contrast=1.2, erase_prob=0.1)
+    print("Use predict_logic() or predict_image_file() functions to run inference.")

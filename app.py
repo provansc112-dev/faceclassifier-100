@@ -173,7 +173,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="Face Recognition System") as demo:
 
 if __name__ == "__main__":
     demo.queue().launch(
-        server_name="0.0.0.0",
-        server_port=7860,
-        show_api=False
+        # server_name="0.0.0.0",
+        # server_port=7860,
+        # show_api=False
     )
