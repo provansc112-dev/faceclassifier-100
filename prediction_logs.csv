@@ -1,0 +1,3 @@
+Timestamp,Model,Prediction,Confidence,Status,Top 3 Analysis,User Feedback,Actual Class,User Comment,Flip,Brightness,Contrast,Random Erase
+2026-01-09 13:33:20,swin,Unknown,37.74%,UNRECOGNIZED,[029: 37.74%] [011: 28.19%] [090: 6.15%] ,WRONG,003,gg,True,2,2,0
+2026-01-09 13:34:04,swin,Unknown,71.22%,UNRECOGNIZED,[061: 71.22%] [012: 2.65%] [020: 1.01%] ,WRONG,003,almost there!,True,2,2,0.2

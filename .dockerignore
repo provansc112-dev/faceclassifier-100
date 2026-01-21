@@ -1,0 +1,17 @@
+.git
+.gitignore
+.gitattributes
+__pycache__
+.venv
+.venv_test
+*.pyc
+*.pyo
+*.egg-info
+.pytest_cache
+.vscode
+.idea
+*.egg
+.DS_Store
+Thumbs.db
+__pycache__/
+.git/
