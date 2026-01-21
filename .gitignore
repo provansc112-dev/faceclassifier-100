@@ -51,3 +51,5 @@ Thumbs.db
 
 # Gradio
 __gradio_cached_examples/
+
+models/swinface.pt

@@ -27,6 +27,7 @@ MODEL_CONFIGS = {
     'swin': {
         'model_name': 'swin_tiny_patch4_window7_224',
         'weights': os.path.join(BASE_DIR, 'models', 'swintransformer.pt'),
+        'pretrained_source': os.path.join(BASE_DIR, 'models', 'swinface.pt'), # Original SwinFace weights
         'size': 112,
         'mean': [0.485, 0.456, 0.406],
         'std': [0.229, 0.224, 0.225]

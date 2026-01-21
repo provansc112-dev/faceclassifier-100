@@ -10,4 +10,4 @@ app_file: app.py
 pinned: false
 ---
 
-Check out the configuration reference at https://huggingface.co/docs/hub/spaces-config-reference
+Pretrained Swin: https://drive.google.com/drive/folders/1NjVN3Kp_Tmwt17hWCIWgHpuWzkHYaman?usp=sharing (SwinFace)
